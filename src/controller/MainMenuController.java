@@ -76,13 +76,18 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private TableColumn<Product, Double> productPriceCol;
-    
+    // This will help us search
     private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
     private static ObservableList<Part> allParts = FXCollections.observableArrayList();
     private static ObservableList<Product> filteredProducts = FXCollections.observableArrayList();
     private static ObservableList<Part> filteredParts = FXCollections.observableArrayList();
-
- 
+// variables to be able to give information to modifypart/modifyproduct screens
+    private static Part partSelectedToModify;
+    private static int modifyPartIndex;
+    private static Part productSelectedToModify;
+    private static int modifyProductIndex;
+    
+    
       @FXML
     void onActionSearchPart(ActionEvent event) {
         

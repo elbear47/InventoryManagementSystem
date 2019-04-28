@@ -6,21 +6,27 @@
 
 package model;
 
+import javafx.beans.property.SimpleIntegerProperty;
+
 /**
  *
  * @author elber
  */
-public class InHouse {
-    private int machineID;
+public class InHouse extends Part{
+    private SimpleIntegerProperty machineID;
+    public InHouse(){
+        super();
+        
+    }
 
     public int getMachineID() {
-        return machineID;
+        return this.machineID.get();
     }
 
     public void setMachineID(int machineID) {
-        this.machineID = machineID;
+        this.machineID.set(machineID); 
     }
-    
+
     
     
 }

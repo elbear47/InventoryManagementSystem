@@ -10,9 +10,13 @@ package model;
  *
  * @author elber
  */
-public class Outsourced {
+public class Outsourced extends Part{
     private String companyName;
 
+    public Outsourced(){
+        super();
+        
+    }
     public String getCompanyName() {
         return companyName;
     }

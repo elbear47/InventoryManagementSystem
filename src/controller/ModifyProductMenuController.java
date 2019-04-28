@@ -90,12 +90,12 @@ public class ModifyProductMenuController implements Initializable {
 
     @FXML
     void onActionDeleteProduct(ActionEvent event) {
-
+        
     }
 
     @FXML
     void onActionSaveProductChanges(ActionEvent event) {
-
+        
     }
 
       @FXML

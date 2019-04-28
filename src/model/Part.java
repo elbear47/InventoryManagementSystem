@@ -13,27 +13,28 @@ package model;
 public abstract class Part {
     private int partID;
     private String name;
-    private double price;
+    private Double price;
     private int inStock;
     private int min;
     private int max;
 
-    public Part(int partID, String name, int inStock, double price) {
+    public Part() {
         this.partID = partID;
         this.name = name;
         this.price = price;
         this.inStock = inStock;
+        this.min = min;
+        this.max = max;
     }
     
     /*
     public Part(int partID, String name, int inStock, double price) {
-        setPartID(partID);
-        setName(name);
-        setPrice(price);
-        setInStock(inStock);
+    setPartID(partID);
+    setName(name);
+    setPrice(price);
+    setInStock(inStock);
     }
-    */
-    
+     */
     public int getPartID() {
         return partID;
     }
@@ -50,11 +51,11 @@ public abstract class Part {
         this.name = name;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -81,7 +82,7 @@ public abstract class Part {
     public void setMax(int max) {
         this.max = max;
     }
-    
-    
+   
+
     
 }

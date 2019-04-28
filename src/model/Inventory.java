@@ -21,7 +21,9 @@ public class Inventory{
     private static ObservableList<Part> allParts = FXCollections.observableArrayList();
     private static ObservableList<Product> filteredProducts = FXCollections.observableArrayList();
     private static ObservableList<Part> filteredParts = FXCollections.observableArrayList();
-
+    private static int partIDCount = 0;
+    private static int productIDCount = 0;
+    public static boolean alreadyExecuted = false;
     
     
     public static void addProducts(Product product){
@@ -36,7 +38,28 @@ public class Inventory{
    public static ObservableList<Part> getAllParts(){
        return allParts;
    }
-
+   
+   // These methods will help auto generate a new part id
+   public static int getPartIDCount() {
+        partIDCount++;
+        return partIDCount;
+    }
+    
+    public static int cancelPartIDCount() {
+        partIDCount--;
+        return partIDCount;
+    }
+    // These methods will help auto generate a new product id
+    public static int getProductIDCount() {
+        productIDCount++;
+        return productIDCount;
+    }
+    
+   
+    public static int cancelProductIDCount() {
+        productIDCount--;
+        return productIDCount;
+    }
 
   
    }

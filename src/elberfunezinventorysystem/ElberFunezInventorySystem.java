@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.InHouse;
 import model.Inventory;
 import model.Part;
 import model.Product;
@@ -49,6 +50,9 @@ public class ElberFunezInventorySystem extends Application {
         Inventory.addProducts(p2);
         Inventory.addProducts(p3);
         
+        InHouse newinhousePart = new InHouse();
+        
+        /*
         Part part1 = new Part(1,"Wheel", 500, 30.0) {};
         Part part2 = new Part(2,"battery", 50, 120.0) {};
         Part part3 = new Part(3,"Hard Drive", 36, 85.0) {};
@@ -56,7 +60,7 @@ public class ElberFunezInventorySystem extends Application {
         Inventory.addParts(part1);
         Inventory.addParts(part2);
         Inventory.addParts(part3);
-        
+        */
         launch(args);
     }
     

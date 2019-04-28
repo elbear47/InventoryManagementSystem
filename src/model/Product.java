@@ -22,7 +22,15 @@ public class Product {
     private int max;
     
     //Still need to add methods for associatedProduct
+    // This class will be used to populate table with sample data 
     public Product(int productID, String name, int inStock,double price) {
+        this.productID = productID;
+        this.name = name;
+        this.price = price;
+        this.inStock = inStock;
+    }
+    // this class will be used to populate table with new data from AddProductMenu
+    public Product() {
         this.productID = productID;
         this.name = name;
         this.price = price;
