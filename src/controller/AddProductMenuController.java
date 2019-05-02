@@ -6,6 +6,7 @@
 
 package controller;
 
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,12 +34,12 @@ import model.Product;
  * @author elber
  */
 public class AddProductMenuController implements Initializable {
-  Stage stage;
+    Stage stage;
     Parent scene;
     
     @FXML
     private TextField searchProductTxt;
-
+    
     @FXML
     private RadioButton inHouseRBtn;
 
@@ -90,8 +91,11 @@ public class AddProductMenuController implements Initializable {
     // this label will update when diff radio button is selected
     @FXML
     private Label companyNameLabel;
-
+    
+    private boolean isInHouse;
     private int productID;
+
+    
     
     
     @FXML
@@ -158,13 +162,14 @@ public class AddProductMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
         productsTableView.setItems(Inventory.getallProducts());
        
         productIdCol.setCellValueFactory(new PropertyValueFactory<>("productID"));
         productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         productInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         productPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        // How to get same table in add part IDK??? :( ask monday
+        
         productsTableView.getItems().addAll();
         
         productID = Inventory.getProductIDCount();

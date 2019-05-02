@@ -30,6 +30,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Inventory;
+import static model.Inventory.getAllParts;
+import static model.Inventory.getallProducts;
 import model.Part;
 import model.Product;
 
@@ -39,120 +41,45 @@ import model.Product;
  * @author elber
  */
 public class MainMenuController implements Initializable {
-    //declare variables to switch scenes
-    Stage stage;
-    Parent scene;
+    
+    
     // Variables used for Scene
    @FXML private TableView<Product> productsTableView;
    @FXML private TableView<Part> partsTableView;
-    
-   
-     @FXML
-    private TableColumn<Part, Double> partPriceCol;
+   // Table columns for Part 
+   @FXML private TableColumn<Part, Integer> partIdCol;
+   @FXML private TableColumn<Part, String> partNameCol;
+   @FXML private TableColumn<Part, Integer> partInvLevelCol;
+   @FXML private TableColumn<Part, Double> partPriceCol;
+   //Table Columns for Product
+    @FXML private TableColumn<Product, Integer> productIdCol;
+    @FXML private TableColumn<Product, String> productNameCol;
+    @FXML private TableColumn<Product, Integer> productInvLevelCol;
+    @FXML private TableColumn<Product, Double> productPriceCol;
+ 
+    //Search fields
+    @FXML private TextField searchPartTxt;
+    @FXML private TextField searchProductTxt;
+    //Buttons
+    @FXML private Button ModifyProductButton;
 
-    @FXML
-    private TextField searchPartTxt;
-
-    @FXML
-    private TableColumn<Part, Integer> partInvLevelCol;
-
-    @FXML
-    private TextField searchProductTxt;
-
-    @FXML
-    private TableColumn<Part, Integer> partIdCol;
-
-    @FXML
-    private TableColumn<Part, String> partNameCol;
-
-    @FXML
-    private TableColumn<Product, Integer> productIdCol;
-
-    @FXML
-    private TableColumn<Product, String> productNameCol;
-
-    @FXML
-    private TableColumn<Product, Integer> productInvLevelCol;
-
-    @FXML
-    private TableColumn<Product, Double> productPriceCol;
     // This will help us search
     private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
     private static ObservableList<Part> allParts = FXCollections.observableArrayList();
-    private static ObservableList<Product> filteredProducts = FXCollections.observableArrayList();
-    private static ObservableList<Part> filteredParts = FXCollections.observableArrayList();
-// variables to be able to give information to modifypart/modifyproduct screens
-    private static Part partSelectedToModify;
-    private static int modifyPartIndex;
-    private static Part productSelectedToModify;
-    private static int modifyProductIndex;
+ 
+
     
-    
+ 
       @FXML
     void onActionSearchPart(ActionEvent event) {
         
-    String searchItem= searchPartTxt.getText();
-    boolean found=false;
-    try{
-        int itemNumber=Integer.parseInt(searchItem);
-        for(Part p: allParts){
-            if(p.getPartID()==itemNumber){
-                System.out.println("This is part "+ itemNumber);
-                found=true;
-
-                   filteredParts = partsTableView.getItems();
-                   filteredParts.add(p);
-
-                    
-        partIdCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
-        partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        partInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("inStock"));
-        partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        
-                partsTableView.setItems(filteredParts);
-            
-            }
-            
-        }
-            if (found==false){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information Dialog");
-            alert.setHeaderText("Error!");
-            alert.setContentText("Part not found");
-
-            alert.showAndWait();
-        }
-    }
-    catch(NumberFormatException e){
-        for(Part p: allParts){
-            if(p.getName().equals(searchItem)){
-                System.out.println("This is part "+p.getPartID());
-                found=true;
-
-               filteredParts = partsTableView.getItems();
-                filteredParts.add(p);
-  
-                partIdCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
-                partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-                partInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("inStock"));
-                partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-                    }
-            
-        }
-            if (found==false){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information Dialog");
-            alert.setHeaderText("Error");
-            alert.setContentText("Part not found");
-
-            alert.showAndWait();
-        }
-    }
-
+    
     }
 
     @FXML
     void onActionDisplayAddPartsView(ActionEvent event) throws IOException {
+          Stage stage;
+        Parent scene;
           stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/AddPartMenu.fxml"));
         stage.setScene(new Scene(scene));
@@ -162,6 +89,9 @@ public class MainMenuController implements Initializable {
 
     @FXML
     void onActionDisplayModifyPartsView(ActionEvent event) throws IOException {
+         Stage stage;
+        Parent scene;
+                //load new scene
            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/ModifyPartMenu.fxml"));
         stage.setScene(new Scene(scene));
@@ -181,6 +111,8 @@ public class MainMenuController implements Initializable {
 
     @FXML
     void onActionDisplayAddProductsView(ActionEvent event) throws IOException {
+        Stage stage;
+        Parent scene;
            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/AddProductMenu.fxml"));
         stage.setScene(new Scene(scene));
@@ -190,10 +122,24 @@ public class MainMenuController implements Initializable {
 
     @FXML
     void onActionDisplayModifyProductsView(ActionEvent event) throws IOException {
-           stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/ModifyProductMenu.fxml"));
-        stage.setScene(new Scene(scene));
+        //declare variables to switch scenes
+        Stage stage;
+        Parent root;
+  
+        stage=(Stage) ModifyProductButton.getScene().getWindow();
+         
+         //  stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        //scene = FXMLLoader.load(getClass().getResource("/view/ModifyProductMenu.fxml"));
+        //stage.setScene(new Scene(scene));
+        //stage.show();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyProductMenu.fxml"));
+        root = loader.load();
+        Scene newScene = new Scene(root);
+        stage.setScene(newScene);
         stage.show();
+        ModifyProductMenuController controller = loader.getController();
+        Product productToModify = productsTableView.getSelectionModel().getSelectedItem();
+        controller.setProduct(productToModify);
 
     }
 
