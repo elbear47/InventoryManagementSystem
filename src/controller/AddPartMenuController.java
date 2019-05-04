@@ -34,41 +34,21 @@ import model.Part;
  * @author elber
  */
 public class AddPartMenuController implements Initializable{
-    //declare variables
-      @FXML
-    private RadioButton inHouseRBtn;
-
-    @FXML
-    private RadioButton outsourcedRBtn;
-
-    @FXML
-    private TextField companyNameTxt;
-    
-    @FXML
-    private TextField maxTxt;
-
-    @FXML
-    private TextField minTxt;
-
-    @FXML
-    private ToggleGroup ToggleGroup;
-
-    @FXML
-    private TextField nameTxt;
-
-    @FXML
-    private TextField partIdTxt;
-
-    @FXML
-    private TextField invTxt;
-
-    @FXML
-    private TextField priceTxt;
-    
-    @FXML
-    private Label companyNameLabel;
-    
-    
+    //Radio Buttons
+    @FXML private RadioButton inHouseRBtn;
+    @FXML private RadioButton outsourcedRBtn;
+    //textfields
+    @FXML private TextField companyNameTxt;
+    @FXML private TextField maxTxt;
+    @FXML private TextField minTxt;
+    @FXML private TextField partIdTxt;
+    @FXML private TextField invTxt;
+    @FXML private TextField priceTxt;
+    @FXML private TextField nameTxt;
+    //ToggleGroup
+    @FXML private ToggleGroup ToggleGroup;
+    //Labels
+    @FXML private Label companyNameLabel;
     
     // Create Reference Variables
     Stage stage;

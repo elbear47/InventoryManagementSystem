@@ -46,7 +46,7 @@
                         <AnchorPane prefHeight="50.0" prefWidth="400.0">
                            <children>
                               <Button layoutX="180.0" layoutY="5.0" mnemonicParsing="false" onAction="#onActionDisplayAddPartsView" prefWidth="54.0" text="Add" />
-                              <Button layoutX="250.0" layoutY="5.0" mnemonicParsing="false" onAction="#onActionDisplayModifyPartsView" text="Modify" />
+                              <Button fx:id="ModifyPartButton" layoutX="250.0" layoutY="5.0" mnemonicParsing="false" onAction="#onActionDisplayModifyPartsView" text="Modify" />
                               <Button layoutX="320.0" layoutY="5.0" mnemonicParsing="false" onAction="#onActionDeletePart" prefWidth="54.0" text="Delete" />
                            </children>
                         </AnchorPane>

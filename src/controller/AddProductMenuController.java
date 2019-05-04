@@ -37,61 +37,30 @@ public class AddProductMenuController implements Initializable {
     Stage stage;
     Parent scene;
     
-    @FXML
-    private TextField searchProductTxt;
-    
-    @FXML
-    private RadioButton inHouseRBtn;
-
-    @FXML
-    private TableColumn<Product, Integer> productIdCol;
-
-    @FXML
-    private TextField productPriceTxt;
-
-    @FXML
-    private TableColumn<Product, String> productNameCol;
-
-    @FXML
-    private TableColumn<Product, Integer> productInvLevelCol;
-
-    @FXML
-    private TextField productMaxTxt;
-
-    @FXML
-    private RadioButton outsourcedRBtn;
-
-    @FXML
-    private TextField productCompanyNameTxt;
-
-    @FXML
-    private ToggleGroup ToggleGroup;
-
-    @FXML
-    private TextField productMinTxt;
-
-    @FXML
-    private TextField productIdTxt;
-
-    @FXML
-    private TextField productNameTxt;
-
-    @FXML
-    private TableColumn<Product, Double> productPriceCol;
-
-    @FXML
-    private TextField productInvLevelTxt;
-
-    
-    @FXML
-    private TableView<Product> productsTableView;
-    
-    @FXML
-    private TableView<Product> ProductsTableViewUpdated;
+    //RADIOBUTTONS and togglegroup
+    @FXML private ToggleGroup ToggleGroup;
+    @FXML private RadioButton inHouseRBtn;
+    @FXML private RadioButton outsourcedRBtn;
+    //Textfields
+    @FXML private TextField searchProductTxt;
+    @FXML private TextField productInvLevelTxt;
+    @FXML private TextField productPriceTxt;
+    @FXML private TextField productMaxTxt;
+    @FXML private TextField productCompanyNameTxt;
+    @FXML private TextField productMinTxt;
+    @FXML private TextField productIdTxt;
+    @FXML private TextField productNameTxt;
+    //tablecolumns
+    @FXML private TableColumn<Product, Integer> productIdCol;
+    @FXML private TableColumn<Product, String> productNameCol;
+    @FXML private TableColumn<Product, Integer> productInvLevelCol;
+    @FXML private TableColumn<Product, Double> productPriceCol;
+   //Tableviews
+    @FXML private TableView<Product> productsTableView;
+    @FXML private TableView<Product> ProductsTableViewUpdated;
     // this label will update when diff radio button is selected
-    @FXML
-    private Label companyNameLabel;
-    
+    @FXML private Label companyNameLabel;
+    //variables
     private boolean isInHouse;
     private int productID;
 

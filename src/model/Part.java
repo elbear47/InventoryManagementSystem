@@ -17,6 +17,8 @@ public abstract class Part {
     private int inStock;
     private int min;
     private int max;
+    private String companyName;
+    private int machineID;
 
     public Part() {
         this.partID = partID;
@@ -81,6 +83,22 @@ public abstract class Part {
 
     public void setMax(int max) {
         this.max = max;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public int getMachineID() {
+        return machineID;
+    }
+
+    public void setMachineID(int machineID) {
+        this.machineID = machineID;
     }
    
 

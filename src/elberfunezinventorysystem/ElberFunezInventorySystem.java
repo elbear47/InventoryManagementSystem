@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.InHouse;
 import model.Inventory;
+import model.Outsourced;
 import model.Part;
 import model.Product;
 
@@ -49,18 +50,45 @@ public class ElberFunezInventorySystem extends Application {
         Inventory.addProducts(p1);
         Inventory.addProducts(p2);
         Inventory.addProducts(p3);
+        //Populate Parts table with inhouse and outsourced parts
+        InHouse newinhousePart1 = new InHouse();
         
-        InHouse newinhousePart = new InHouse();
+        newinhousePart1.setPartID(1);
+        newinhousePart1.setName("Gear");
+        newinhousePart1.setInStock(10);
+        newinhousePart1.setPrice(100.00);
+        newinhousePart1.setMax(10);
+        newinhousePart1.setMin(1);
+        newinhousePart1.setMachineID(1001);
         
-        /*
-        Part part1 = new Part(1,"Wheel", 500, 30.0) {};
-        Part part2 = new Part(2,"battery", 50, 120.0) {};
-        Part part3 = new Part(3,"Hard Drive", 36, 85.0) {};
+        Inventory.addParts(newinhousePart1);
         
-        Inventory.addParts(part1);
-        Inventory.addParts(part2);
-        Inventory.addParts(part3);
-        */
+        InHouse newinhousePart2 = new InHouse();
+        
+        newinhousePart2.setPartID(2);
+        newinhousePart2.setName("bolt");
+        newinhousePart2.setInStock(1000);
+        newinhousePart2.setPrice(0.50);
+        newinhousePart2.setMax(2000);
+        newinhousePart2.setMin(500);
+        newinhousePart2.setMachineID(1002);
+        
+        Inventory.addParts(newinhousePart2);
+        
+         
+         Outsourced newoutsourcedpart1 = new Outsourced();
+         
+        newoutsourcedpart1.setPartID(3);
+        newoutsourcedpart1.setName("Wheel");
+        newoutsourcedpart1.setInStock(35);
+        newoutsourcedpart1.setPrice(60.00);
+        newoutsourcedpart1.setMax(50);
+        newoutsourcedpart1.setMin(10);
+        newoutsourcedpart1.setCompanyName("Huffy");
+        
+        Inventory.addParts(newoutsourcedpart1);
+        
+    
         launch(args);
     }
     

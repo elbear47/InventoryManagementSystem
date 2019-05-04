@@ -64,6 +64,7 @@ public class ModifyProductMenuController implements Initializable {
     //variables
     private Product product;
     
+    
 
     @FXML
     void onActionSearchProduct(ActionEvent event) {
@@ -92,7 +93,8 @@ public class ModifyProductMenuController implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
     }
-
+ 
+    
 public void setProduct(Product product) {
         this.product = product;
         

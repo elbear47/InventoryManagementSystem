@@ -62,6 +62,7 @@ public class MainMenuController implements Initializable {
     @FXML private TextField searchProductTxt;
     //Buttons
     @FXML private Button ModifyProductButton;
+    @FXML private Button ModifyPartButton;
 
     // This will help us search
     private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
@@ -89,14 +90,30 @@ public class MainMenuController implements Initializable {
 
     @FXML
     void onActionDisplayModifyPartsView(ActionEvent event) throws IOException {
-         Stage stage;
-        Parent scene;
-                //load new scene
-           stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/ModifyPartMenu.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+        
+           //declare variables to switch scenes
+        Part partToModify = partsTableView.getSelectionModel().getSelectedItem();
+        if(partToModify != null){
+        Stage stage;
+        Parent root;
+  
+        stage=(Stage) ModifyPartButton.getScene().getWindow();
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyPartMenu.fxml"));
+        root = loader.load();
+        Scene newScene = new Scene(root);
+        stage.setScene(newScene);
+        stage.show();
+        ModifyPartMenuController controller = loader.getController();
+        controller.setPart(partToModify); 
+      }
+        else{
+            Alert newAlert = new Alert(Alert.AlertType.ERROR);
+            newAlert.setTitle("Error In Application");
+            newAlert.setHeaderText("No Part Selected To Modify");
+            newAlert.setContentText("Please Select a Part To modify");
+            newAlert.showAndWait();
+        }
     }
 
     @FXML
@@ -111,13 +128,14 @@ public class MainMenuController implements Initializable {
 
     @FXML
     void onActionDisplayAddProductsView(ActionEvent event) throws IOException {
+        
         Stage stage;
         Parent scene;
            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/AddProductMenu.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
-
+       
     }
 
     @FXML
@@ -127,11 +145,7 @@ public class MainMenuController implements Initializable {
         Parent root;
   
         stage=(Stage) ModifyProductButton.getScene().getWindow();
-         
-         //  stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        //scene = FXMLLoader.load(getClass().getResource("/view/ModifyProductMenu.fxml"));
-        //stage.setScene(new Scene(scene));
-        //stage.show();
+        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyProductMenu.fxml"));
         root = loader.load();
         Scene newScene = new Scene(root);
