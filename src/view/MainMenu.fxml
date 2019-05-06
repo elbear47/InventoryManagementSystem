@@ -7,11 +7,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainMenuController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="828.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainMenuController">
    <children>
       <VBox prefHeight="400.0" prefWidth="800.0">
          <children>
-            <AnchorPane prefHeight="50.0" prefWidth="800.0">
+            <AnchorPane prefHeight="50.0" prefWidth="1000.0">
                <children>
                   <Label layoutX="35.0" layoutY="8.0" text="Inventory Management System" textFill="#2925ee">
                      <font>
@@ -33,6 +33,7 @@
                               </Label>
                               <Button layoutX="174.0" layoutY="7.0" mnemonicParsing="false" onAction="#onActionSearchPart" text="Search" />
                               <TextField fx:id="searchPartTxt" layoutX="237.0" layoutY="7.0" />
+                              <Button layoutX="109.0" layoutY="7.0" mnemonicParsing="false" onAction="#onActionClearSearchPart" text="Clear" />
                            </children>
                         </AnchorPane>
                         <TableView fx:id="partsTableView" prefHeight="200.0" prefWidth="380.0">
@@ -56,13 +57,14 @@
                      <children>
                         <AnchorPane prefHeight="25.0" prefWidth="400.0">
                            <children>
-                              <Label layoutX="25.0" layoutY="6.0" text="Products">
+                              <Label layoutX="14.0" layoutY="6.0" text="Products">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Label>
                               <Button layoutX="174.0" layoutY="7.0" mnemonicParsing="false" onAction="#onActionSearchProduct" text="Search" />
                               <TextField fx:id="searchProductTxt" layoutX="237.0" layoutY="7.0" />
+                              <Button layoutX="116.0" layoutY="7.0" mnemonicParsing="false" onAction="#onActionClearSearchProduct" text="Clear" />
                            </children>
                         </AnchorPane>
                         <TableView fx:id="productsTableView" prefHeight="200.0" prefWidth="380.0">

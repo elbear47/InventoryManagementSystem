@@ -10,6 +10,7 @@ import static com.sun.deploy.util.ReflectionUtil.instanceOf;
 import static com.sun.deploy.util.ReflectionUtil.instanceOf;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,7 +18,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -52,9 +55,12 @@ public class ModifyPartMenuController implements Initializable {
     //Radio Buttons
     @FXML private RadioButton inhouseRBtn;
     @FXML private RadioButton outsourcedRBtn;
-      // Variables
-      private Part part;
-      private boolean isInHouse;
+    // Variables
+    private Part part;
+    private boolean isInHouse;
+    private InHouse inhousePartSelectedToModify;
+    private Outsourced outsourcedPartSelectedToModify;
+    
 
     @FXML
     void onActionSaveModifiedChanges(ActionEvent event) throws IOException {
@@ -66,32 +72,28 @@ public class ModifyPartMenuController implements Initializable {
         this.partMinTxt = partMinTxt;
         this.partCompanyNameTxt = partCompanyNameTxt;
         this.partPriceTxt = partPriceTxt;
-        
-        InHouse newinhousePart = new InHouse();
-         Outsourced newoutsourcedpart = new Outsourced();
+// When the toggleGroup is for inhouse then set text fields to override selected row of type Part
          if(isInHouse ==true){
              // set txt fields equal to part fields(inhouse)
-             newinhousePart.setPartID(Integer.parseInt(partIdTxt.getText()));
-             newinhousePart.setName(partNameTxt.getText());
-             newinhousePart.setInStock(Integer.parseInt(partInvLevelTxt.getText()));
-             newinhousePart.setPrice(Double.parseDouble(partPriceTxt.getText()));
+             inhousePartSelectedToModify.setPartID(Integer.parseInt(partIdTxt.getText()));
+             inhousePartSelectedToModify.setName(partNameTxt.getText());
+             inhousePartSelectedToModify.setInStock(Integer.parseInt(partInvLevelTxt.getText()));
+             inhousePartSelectedToModify.setPrice(Double.parseDouble(partPriceTxt.getText()));
              
-            Inventory.addParts(newinhousePart);
          // Back to main menu after save
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
+        
          }
          else
              // set txt fields equal to part fields (outsourced)
-            newoutsourcedpart.setPartID(Integer.parseInt(partIdTxt.getText()));
-            newoutsourcedpart.setName(partNameTxt.getText());
-            newoutsourcedpart.setInStock(Integer.parseInt(partInvLevelTxt.getText()));
-            newoutsourcedpart.setPrice(Double.parseDouble(partPriceTxt.getText()));
+            outsourcedPartSelectedToModify.setPartID(Integer.parseInt(partIdTxt.getText()));
+            outsourcedPartSelectedToModify.setName(partNameTxt.getText());
+            outsourcedPartSelectedToModify.setInStock(Integer.parseInt(partInvLevelTxt.getText()));
+            outsourcedPartSelectedToModify.setPrice(Double.parseDouble(partPriceTxt.getText()));
             
-            Inventory.addParts(newoutsourcedpart);
-         
          // Back to main menu after save
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
@@ -103,15 +105,25 @@ public class ModifyPartMenuController implements Initializable {
 
      @FXML
     void onActionDisplayMainMenu(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+        Alert newAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        newAlert.setTitle("Confirm Exit");
+        newAlert.setHeaderText("Are You Sure You want to Exit?");
+        newAlert.setContentText("Click Ok if you want to exit");
+        Optional<ButtonType> result = newAlert.showAndWait();
+            if (result.get() == ButtonType.OK) 
+            {
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+            }
+        
     }
     // When you select a part and hit Modify it will load text fields with info from main table
     public void setPart(Part part) {
         this.part = part;
         if(part instanceof InHouse){
+            inhousePartSelectedToModify = (InHouse) part;
             this.ToggleGroup.getSelectedToggle().equals(this.isInHouse);
             isInHouse = true;
             this.inhouseRBtn.setSelected(true);
@@ -125,6 +137,7 @@ public class ModifyPartMenuController implements Initializable {
         }
         else{
             isInHouse = false;
+            outsourcedPartSelectedToModify = (Outsourced) part;
             this.outsourcedRBtn.setSelected(true);
             companyNameLabel.setText("Company Name:");
         partIdTxt.setText(new Integer(part.getPartID()).toString());
@@ -140,12 +153,12 @@ public class ModifyPartMenuController implements Initializable {
        if(this.ToggleGroup.getSelectedToggle().equals(this.inhouseRBtn)){
            isInHouse = true;
            companyNameLabel.setText("Machine ID:");
-           //partCompanyNameTxt.setPromptText("Machine ID");
+           //companyNameLabel.setPromptText("Machine ID");
        }
        if(this.ToggleGroup.getSelectedToggle().equals(this.outsourcedRBtn)){
            isInHouse = false;
            companyNameLabel.setText("Company Name:");
-           //partCompanyNameTxt.setPromptText("Company Name");
+           //companyNameLabel.setPromptText("Company Name");
        }
     }
     /**
@@ -153,6 +166,7 @@ public class ModifyPartMenuController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         // Automatically load inhouse choice
         this.inhouseRBtn.setSelected(true);
        
@@ -166,6 +180,7 @@ public class ModifyPartMenuController implements Initializable {
            companyNameLabel.setText("Company Name:");
          //  partCompanyNameTxt.setPromptText("Company Name");
     }    
+                
     }
 
     

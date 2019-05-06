@@ -8,16 +8,17 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -107,10 +108,12 @@ public class AddPartMenuController implements Initializable{
         nameTxt = this.nameTxt;
         invTxt = this.invTxt;
         priceTxt = this.priceTxt;
+        
          InHouse newinhousePart = new InHouse();
          Outsourced newoutsourcedpart = new Outsourced();
          if(isInHouse ==true){
              // set txt fields equal to part fields(inhouse)
+             
              newinhousePart.setPartID(Integer.parseInt(partIdTxt.getText()));
              newinhousePart.setName(nameTxt.getText());
              newinhousePart.setInStock(Integer.parseInt(invTxt.getText()));
@@ -143,10 +146,19 @@ public class AddPartMenuController implements Initializable{
 
     @FXML
     void onActionDisplayMainMenu(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+        Alert newAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        newAlert.setTitle("Confirm Exit");
+        newAlert.setHeaderText("Are You Sure You want to Exit?");
+        newAlert.setContentText("Click Ok if you want to exit");
+        Optional<ButtonType> result = newAlert.showAndWait();
+            if (result.get() == ButtonType.OK) 
+            {
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+            }
+        
     }
 
     

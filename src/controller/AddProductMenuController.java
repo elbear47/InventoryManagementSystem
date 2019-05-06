@@ -9,14 +9,21 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -26,6 +33,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Inventory;
+import model.Part;
 import model.Product;
 
 /**
@@ -42,7 +50,7 @@ public class AddProductMenuController implements Initializable {
     @FXML private RadioButton inHouseRBtn;
     @FXML private RadioButton outsourcedRBtn;
     //Textfields
-    @FXML private TextField searchProductTxt;
+    @FXML private TextField searchPartTxt;
     @FXML private TextField productInvLevelTxt;
     @FXML private TextField productPriceTxt;
     @FXML private TextField productMaxTxt;
@@ -50,36 +58,76 @@ public class AddProductMenuController implements Initializable {
     @FXML private TextField productMinTxt;
     @FXML private TextField productIdTxt;
     @FXML private TextField productNameTxt;
-    //tablecolumns
-    @FXML private TableColumn<Product, Integer> productIdCol;
-    @FXML private TableColumn<Product, String> productNameCol;
-    @FXML private TableColumn<Product, Integer> productInvLevelCol;
-    @FXML private TableColumn<Product, Double> productPriceCol;
+    //tablecolumns for all parts in inventory
+    @FXML private TableColumn<Product, Integer> partIdCol;
+    @FXML private TableColumn<Product, String> partNameCol;
+    @FXML private TableColumn<Product, Integer> partInvLevelCol;
+    @FXML private TableColumn<Product, Double> partPriceCol;
+    //tablecolumns for all parts associated w that product
+    @FXML private TableColumn<Product, Integer> partAssociatedIdCol;
+    @FXML private TableColumn<Product, String> partAssociatedNameCol;
+    @FXML private TableColumn<Product, Integer> partAssociatedInvLevelCol;
+    @FXML private TableColumn<Product, Double> partAssociatedPriceCol;
    //Tableviews
-    @FXML private TableView<Product> productsTableView;
-    @FXML private TableView<Product> ProductsTableViewUpdated;
+    //Top Table (will only be populated with products we have created)
+    @FXML private TableView<Part>  allPartsInInventory;
+    //Bottom table (This will store current products plus products added from above tables)
+    @FXML private TableView<Part> partsProductUses;
     // this label will update when diff radio button is selected
     @FXML private Label companyNameLabel;
     //variables
     private boolean isInHouse;
     private int productID;
-
+    FilteredList<Part> filteredPartData = new FilteredList<>(Inventory.getAllParts(), e -> true);
     
     
     
     @FXML
-    void onActionSearchProduct(ActionEvent event) {
-
+    void onActionSearchAllParts(ActionEvent event) {
+           this.searchPartTxt = searchPartTxt;
+        String x = searchPartTxt.getText();
+        filteredPartData.setPredicate((Predicate<? super Part>) (Part part)->{
+            if(x.equals("")|| x == null){
+                return true;
+            }
+            else if(part.getName().contains(x)|| new Integer(part.getPartID()).toString().equals(x)){
+            return true;
+        }
+        return false;
+        });
+        SortedList sortedProducts = new SortedList(filteredPartData);
+        sortedProducts.comparatorProperty().bind(allPartsInInventory.comparatorProperty());
+        allPartsInInventory.setItems(sortedProducts);
     }
     // this method will add product to the bottom table within the AddProductsView
     @FXML
-    void onActionAddProduct(ActionEvent event) {
-        
+    void onActionAddAssociatedPart(ActionEvent event) {
+         ObservableList selectedPart = allPartsInInventory.getSelectionModel().getSelectedItems();
+     partsProductUses.setItems(selectedPart);
     }
 
     @FXML
-    void onActionDeleteProduct(ActionEvent event) {
-
+    void onActionDeleteAssociatedPart(ActionEvent event) {
+        Part partToDelete = partsProductUses.getSelectionModel().getSelectedItem();
+        if (partToDelete != null) {
+            Alert newAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            newAlert.setTitle("Confirm Delete");
+            newAlert.setHeaderText("Are You Sure You want to Delete Part?");
+            newAlert.setContentText("Click Ok if you want to delete");
+            Optional<ButtonType> result = newAlert.showAndWait();
+            if (result.get() == ButtonType.OK) 
+            {
+            partsProductUses.getItems().removeAll(partsProductUses.getSelectionModel().getSelectedItem());
+                //updatePartsTableView();
+            }
+            
+        } else {
+            Alert newAlert = new Alert(Alert.AlertType.ERROR);
+            newAlert.setTitle("Error When Trying To Delete");
+            newAlert.setHeaderText("Application Could not Delete Anything");
+            newAlert.setContentText("Please Select a Part to Delete");
+            newAlert.showAndWait();
+        }
     }
 // this method will add product to main menu 
     @FXML
@@ -98,7 +146,7 @@ public class AddProductMenuController implements Initializable {
         
         // Add it to current tableview
         Inventory.addProducts(newProduct);
-        
+        newProduct.setAssociatedParts(partsProductUses.getItems());
         // Clear txt field
         productIdTxt.clear();
         productNameTxt.clear();
@@ -118,10 +166,18 @@ public class AddProductMenuController implements Initializable {
 
    @FXML
     void onActionDisplayMainMenu(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+       Alert newAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        newAlert.setTitle("Confirm Cancellation");
+        newAlert.setHeaderText("Are You Sure You want to Cancel Add Product?");
+        newAlert.setContentText("Click Ok if you are sure");
+        Optional<ButtonType> result = newAlert.showAndWait();
+            if (result.get() == ButtonType.OK) 
+            {
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+            }
     }
 
 
@@ -130,16 +186,21 @@ public class AddProductMenuController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        
-        productsTableView.setItems(Inventory.getallProducts());
+        // For Bottom Table
+        partAssociatedIdCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
+        partAssociatedNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        partAssociatedInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("inStock"));
+        partAssociatedPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+       // For Top Table
+        allPartsInInventory.setItems(Inventory.getAllParts());
        
-        productIdCol.setCellValueFactory(new PropertyValueFactory<>("productID"));
-        productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        productInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("inStock"));
-        productPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        partIdCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
+        partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        partInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("inStock"));
+        partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
         
-        productsTableView.getItems().addAll();
+        
+        allPartsInInventory.getItems().addAll();
         
         productID = Inventory.getProductIDCount();
         productIdTxt.setEditable(false);

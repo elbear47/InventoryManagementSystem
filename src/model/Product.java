@@ -6,6 +6,7 @@
 
 package model;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
@@ -13,7 +14,7 @@ import javafx.collections.ObservableList;
  * @author elber
  */
 public class Product {
-    private ObservableList<Product> associatedProducts;
+    private ObservableList<Part> associatedParts;
     private int productID;
     private String name;
     private double price;
@@ -85,7 +86,17 @@ public class Product {
     public void setPrice(double price) {
         this.price = price;
     }
-    
+   
+
+    public ObservableList<Part> getAssociatedParts() {
+        return associatedParts;
+    }
+
+    public void setAssociatedParts(ObservableList<Part> associatedParts) {
+        this.associatedParts = associatedParts;
+    }
+
+ 
     
     
     

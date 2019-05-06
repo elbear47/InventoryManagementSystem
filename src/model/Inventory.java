@@ -61,7 +61,8 @@ public class Inventory{
         return productIDCount;
     }
 
-  
+ 
+ 
    }
 
   //Listen for changes in allProducts
