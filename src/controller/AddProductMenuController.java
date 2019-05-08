@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -33,6 +34,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Inventory;
+import static model.Inventory.getAllParts;
 import model.Part;
 import model.Product;
 
@@ -79,6 +81,7 @@ public class AddProductMenuController implements Initializable {
     private boolean isInHouse;
     private int productID;
     FilteredList<Part> filteredPartData = new FilteredList<>(Inventory.getAllParts(), e -> true);
+    private ObservableList<Part> currentParts = FXCollections.observableArrayList();
     
     
     
@@ -102,14 +105,17 @@ public class AddProductMenuController implements Initializable {
     // this method will add product to the bottom table within the AddProductsView
     @FXML
     void onActionAddAssociatedPart(ActionEvent event) {
-         ObservableList selectedPart = allPartsInInventory.getSelectionModel().getSelectedItems();
-     partsProductUses.setItems(selectedPart);
+         Part part = allPartsInInventory.getSelectionModel().getSelectedItem();
+        currentParts.add(part);
+        updatepartsProductUsesTableView();
+        updateAllPartsInInventory();
     }
 
     @FXML
     void onActionDeleteAssociatedPart(ActionEvent event) {
-        Part partToDelete = partsProductUses.getSelectionModel().getSelectedItem();
-        if (partToDelete != null) {
+         Part partToDelete = partsProductUses.getSelectionModel().getSelectedItem();
+
+      if (partToDelete != null) {
             Alert newAlert = new Alert(Alert.AlertType.CONFIRMATION);
             newAlert.setTitle("Confirm Delete");
             newAlert.setHeaderText("Are You Sure You want to Delete Part?");
@@ -118,7 +124,6 @@ public class AddProductMenuController implements Initializable {
             if (result.get() == ButtonType.OK) 
             {
             partsProductUses.getItems().removeAll(partsProductUses.getSelectionModel().getSelectedItem());
-                //updatePartsTableView();
             }
             
         } else {
@@ -179,7 +184,15 @@ public class AddProductMenuController implements Initializable {
             stage.show();
             }
     }
-
+   public void updateAllPartsInInventory() 
+    {
+        allPartsInInventory.setItems(getAllParts());
+    
+    }
+    public void updatepartsProductUsesTableView() 
+    {
+        partsProductUses.setItems(currentParts);
+    }
 
     /**
      * Initializes the controller class.
@@ -187,6 +200,7 @@ public class AddProductMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // For Bottom Table
+        partsProductUses.setItems(currentParts);
         partAssociatedIdCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
         partAssociatedNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         partAssociatedInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("inStock"));

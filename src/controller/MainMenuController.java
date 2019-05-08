@@ -205,6 +205,14 @@ public class MainMenuController implements Initializable {
     @FXML
     void onActionDisplayModifyProductsView(ActionEvent event) throws IOException {
         //declare variables to switch scenes
+        Product productToModify = productsTableView.getSelectionModel().getSelectedItem();
+        if(productToModify == null){
+            Alert newAlert = new Alert(Alert.AlertType.ERROR);
+            newAlert.setTitle("Error In Application");
+            newAlert.setHeaderText("No Product Selected To Modify");
+            newAlert.setContentText("Please Select a Product To modify");
+            newAlert.showAndWait();
+        } else{
         Stage stage;
         Parent root;
         stage = (Stage) ModifyProductButton.getScene().getWindow();
@@ -215,9 +223,9 @@ public class MainMenuController implements Initializable {
         stage.setScene(newScene);
         stage.show();
         ModifyProductMenuController controller = loader.getController();
-        Product productToModify = productsTableView.getSelectionModel().getSelectedItem();
+        
         controller.setProduct(productToModify);
-
+        }
     }
 
     @FXML
@@ -262,55 +270,7 @@ public class MainMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        /*
-        partIdCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
-        partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        partInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("inStock"));
-        partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-        productIdCol.setCellValueFactory(new PropertyValueFactory<>("productID"));
-        productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        productInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("inStock"));
-        productPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        productsTableView.setItems(productList);
-        partsTableView.setItems(Inventory.getAllParts());
-        InHouse newinhousePart1 = new InHouse();
-        
-        newinhousePart1.setPartID(1);
-        newinhousePart1.setName("Gear");
-        newinhousePart1.setInStock(10);
-        newinhousePart1.setPrice(100.00);
-        newinhousePart1.setMax(10);
-        newinhousePart1.setMin(1);
-        newinhousePart1.setMachineID(1001);
-        
-        Inventory.addParts(newinhousePart1);
-        
-        InHouse newinhousePart2 = new InHouse();
-        
-        newinhousePart2.setPartID(2);
-        newinhousePart2.setName("bolt");
-        newinhousePart2.setInStock(1000);
-        newinhousePart2.setPrice(0.50);
-        newinhousePart2.setMax(2000);
-        newinhousePart2.setMin(500);
-        newinhousePart2.setMachineID(1002);
-        
-        Inventory.addParts(newinhousePart2);
-        
-         
-         Outsourced newoutsourcedpart1 = new Outsourced();
-         
-        newoutsourcedpart1.setPartID(3);
-        newoutsourcedpart1.setName("Wheel");
-        newoutsourcedpart1.setInStock(35);
-        newoutsourcedpart1.setPrice(60.00);
-        newoutsourcedpart1.setMax(50);
-        newoutsourcedpart1.setMin(10);
-        newoutsourcedpart1.setCompanyName("Huffy");
-        
-        Inventory.addParts(newoutsourcedpart1);
-         */
+ 
         
         // get 
         productsTableView.setItems(Inventory.getallProducts());

@@ -38,7 +38,13 @@ public class Inventory{
    public static ObservableList<Part> getAllParts(){
        return allParts;
    }
-   
+  // This method will delete a part
+    public static void deletePart(Part part) {
+        allParts.remove(part);
+    }
+    public static void deleteProduct(Product product) {
+        allProducts.remove(product);
+    }
    // These methods will help auto generate a new part id
    public static int getPartIDCount() {
         partIDCount++;

@@ -72,7 +72,6 @@ public class ModifyProductMenuController implements Initializable {
     @FXML private TextField productMinTxt;
     
     //variables
-    private Product product;
     private Product productSelectedToModify;
     FilteredList<Part> filteredPartData = new FilteredList<>(Inventory.getAllParts(), e -> true);
 
@@ -100,16 +99,16 @@ public class ModifyProductMenuController implements Initializable {
         //allPartsInInventory.getSelectionModel().getSelectedItem();
          Part part = allPartsInInventory.getSelectionModel().getSelectedItem();
         currentParts.add(part);
+        updateUpdatedPartsTableView();
         updateAllPartsInInventory();
         
     }
 
     @FXML
     void onActionDeletePart(ActionEvent event) {
-         Part productToDelete = allPartsInInventory.getSelectionModel().getSelectedItem();
-         Part productToDelete2 = updatedPartsTableView.getSelectionModel().getSelectedItem();
+         Part partToDelete = updatedPartsTableView.getSelectionModel().getSelectedItem();
 
-      if (productToDelete != null) {
+      if (partToDelete != null) {
             Alert newAlert = new Alert(Alert.AlertType.CONFIRMATION);
             newAlert.setTitle("Confirm Delete");
             newAlert.setHeaderText("Are You Sure You want to Delete Part?");
@@ -117,7 +116,7 @@ public class ModifyProductMenuController implements Initializable {
             Optional<ButtonType> result = newAlert.showAndWait();
             if (result.get() == ButtonType.OK) 
             {
-            allPartsInInventory.getItems().removeAll(allPartsInInventory.getSelectionModel().getSelectedItem());
+            updatedPartsTableView.getItems().removeAll(updatedPartsTableView.getSelectionModel().getSelectedItem());
             }
             
         } else {
@@ -131,6 +130,7 @@ public class ModifyProductMenuController implements Initializable {
 
     @FXML
     void onActionSaveProductChanges(ActionEvent event) throws IOException {
+      
         this.productIdTxt = productIdTxt;
         this.productNameTxt = productNameTxt;
         this.productInvLevelTxt = productInvLevelTxt;
@@ -144,11 +144,17 @@ public class ModifyProductMenuController implements Initializable {
         productSelectedToModify.setMax(Integer.parseInt(productMaxTxt.getText()));
         productSelectedToModify.setMin(Integer.parseInt(productMinTxt.getText()));
         productSelectedToModify.setPrice(Double.parseDouble(productPriceTxt.getText()));
+        // Add it to current tableview
+        
+        productSelectedToModify.setAssociatedParts(updatedPartsTableView.getItems());
          // Back to main menu after save
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
+        
+        
+        
         
     }
 
@@ -171,14 +177,15 @@ public class ModifyProductMenuController implements Initializable {
  
     
 public void setProduct(Product product) {
-        this.product = product;
-        
-        productIdTxt.setText(new Integer(product.getProductID()).toString());
+        this.productSelectedToModify = product;
+        updatedPartsTableView.setItems(product.getAssociatedParts()); 
+         productSelectedToModify = product;
+        productIdTxt.setText(Integer.toString(product.getProductID()));
         productNameTxt.setText(product.getName());
-        productInvLevelTxt.setText(new Integer(product.getInStock()).toString());
-        productMinTxt.setText(new Integer(product.getMin()).toString());
-        productMaxTxt.setText(new Integer(product.getMax()).toString());
-        productPriceTxt.setText(new Double(product.getPrice()).toString());
+        productInvLevelTxt.setText(Integer.toString(product.getInStock()));
+        productMinTxt.setText(Integer.toString(product.getMin()));
+        productMaxTxt.setText(Integer.toString(product.getMax()));
+        productPriceTxt.setText(Double.toString(product.getPrice()));
        
         
      }
@@ -197,8 +204,13 @@ public void setProduct(Product product) {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-
-       
+        //Bottom Table Set
+         updatedPartsTableView.setItems(currentParts);
+        partIdUpdatedCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
+        partNameUpdatedCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        partInvLevelUpdatedCol.setCellValueFactory(new PropertyValueFactory<>("inStock"));
+        partPriceUpdatedCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+       //Top Table set
         allPartsInInventory.setItems(Inventory.getAllParts());
         
         partIdCol.setCellValueFactory(new PropertyValueFactory<>("partID"));

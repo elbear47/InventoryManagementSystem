@@ -73,7 +73,8 @@ public class ModifyPartMenuController implements Initializable {
         this.partCompanyNameTxt = partCompanyNameTxt;
         this.partPriceTxt = partPriceTxt;
 // When the toggleGroup is for inhouse then set text fields to override selected row of type Part
-         if(isInHouse ==true){
+         if(isInHouse ==true ){
+             
              // set txt fields equal to part fields(inhouse)
              inhousePartSelectedToModify.setPartID(Integer.parseInt(partIdTxt.getText()));
              inhousePartSelectedToModify.setName(partNameTxt.getText());
@@ -89,6 +90,7 @@ public class ModifyPartMenuController implements Initializable {
          }
          else
              // set txt fields equal to part fields (outsourced)
+            
             outsourcedPartSelectedToModify.setPartID(Integer.parseInt(partIdTxt.getText()));
             outsourcedPartSelectedToModify.setName(partNameTxt.getText());
             outsourcedPartSelectedToModify.setInStock(Integer.parseInt(partInvLevelTxt.getText()));
